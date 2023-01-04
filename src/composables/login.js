@@ -2,8 +2,8 @@ import { ref, onMounted } from "vue";
 import * as msal from "@azure/msal-browser";
 import { msalConfig, loginRequest, graphConfig, tokenRequest } from "../authConfig";
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
-const userData = ref(null);
-const accessToken = ref(null);
+const userData = ref("");
+const accessToken = ref("");
 const login = async () => {
     const response = await myMSALObj
         .loginPopup(loginRequest)

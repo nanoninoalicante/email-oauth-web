@@ -2,14 +2,18 @@
 import { onMounted, ref } from "vue";
 import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
-const { readMail } = useLogin();
+const { readMail, userData } = useLogin();
 const emails = ref([]);
-const loading = ref(true);
-onMounted(async () => {
+const loading = ref(false);
+const checkMail = async () => {
+  loading.value = true;
   const { response = {} } = await readMail();
   emails.value = response.value;
   loading.value = false;
-});
+}
+onMounted(() => {
+  checkMail();
+})
 </script>
 
 <template>
@@ -20,7 +24,7 @@ onMounted(async () => {
         <SpinnerIcon class="h-14 w-14 fill-slate-500 animate-spin"></SpinnerIcon>
       </div>
     </div>
-    <div class="flex flex-col space-y-8">
+    <div v-if="userData" class="flex flex-col space-y-8">
       <div v-if="emails.length > 0" v-for="email in emails" class="flex bg-gray-50 p-4 rounded-xl">
         <div class="flex flex-col space-y-2" :class="{ 'font-bold': !email.isRead }">
           <div class="flex">
