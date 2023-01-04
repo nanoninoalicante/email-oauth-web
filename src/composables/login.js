@@ -1,6 +1,6 @@
 import { ref, onMounted } from "vue";
 import * as msal from "@azure/msal-browser";
-import { msalConfig, loginRequest } from "../authConfig";
+import { msalConfig, loginRequest, graphConfig, tokenRequest } from "../authConfig";
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
 const userData = ref(null);
 const accessToken = ref(null);
@@ -22,25 +22,7 @@ const checkAccounts = () => {
         userData.value = currentAccounts[0];
     }
 };
-function callMSGraph(endpoint, token, callback) {
-    const headers = new Headers();
-    const bearer = `Bearer ${token}`;
-
-    headers.append("Authorization", bearer);
-
-    const options = {
-        method: "GET",
-        headers: headers
-    };
-
-    console.log('request made to Graph API at: ' + new Date().toString());
-
-    fetch(endpoint, options)
-        .then(response => response.json())
-        .then(response => callback(response, endpoint))
-        .catch(error => console.log(error));
-}
-const getTokenRedirect = (request) => {
+const getTokenRedirect = async (request) => {
     /**
      * See here for more info on account retrieval:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
@@ -59,23 +41,52 @@ const getTokenRedirect = (request) => {
         }
     });
 };
-const seeProfile = () => {
-    getTokenRedirect(loginRequest)
+const getToken = async () => {
+    return getTokenRedirect(tokenRequest)
         .then((response) => {
             console.log("token: ", response);
             accessToken.value = response.accessToken;
+            return response.accessToken;
         })
         .catch((error) => {
             console.error(error);
         });
 };
+const callMSGraph = async (endpoint, token) => {
+    const headers = new Headers();
+    const bearer = `Bearer ${token}`;
+
+    headers.append("Authorization", bearer);
+
+    const options = {
+        method: "GET",
+        headers: headers,
+    };
+
+    console.log("request made to Graph API at: " + new Date().toString());
+
+    const response = await fetch(endpoint, options)
+        .then((response) => response.json())
+        .catch((error) => console.log(error));
+    return { response, endpoint };
+};
+const readMail = async () => {
+    const token = await getToken();
+    return callMSGraph(graphConfig.graphMailEndpoint, token);
+}
+const seeProfile = async () => {
+    const token = await getToken();
+    return callMSGraph(graphConfig.graphMeEndpoint, token);
+}
 export function useLogin() {
     return {
-        seeProfile,
+        getToken,
         accessToken,
         userData,
         getTokenRedirect,
         checkAccounts,
-        login
+        login,
+        readMail,
+        seeProfile
     };
 }

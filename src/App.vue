@@ -1,5 +1,19 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from "vue-router";
+import { onMounted } from "vue";
+import { useLogin } from "@/composables/login";
+const {
+  checkAccounts,
+  login,
+  userData,
+  accessToken,
+  getToken,
+  readMail,
+  seeProfile,
+} = useLogin();
+onMounted(() => {
+  checkAccounts();
+});
 </script>
 
 <template>
@@ -7,9 +21,22 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="container mx-auto my-4 p-y4">
       <h1 class="text-3xl font-medium text-center">Email OAuth</h1>
     </div>
+    <div class="fixed right-0 top-0 m-4">
+      <button @click="login" class="p-4 rounded-2xl text-md bg-blue-500 text-white">
+        Login with Microsoft
+      </button>
+    </div>
+    <div v-if="userData" class="w-full flex justify-center items-center flex-col space-y-4">
+      <div class="flex">
+        <h3 class="text-xl">You are logged in</h3>
+      </div>
+      <div class="flex flex-col items-center">
+        <p class="text-lg">{{ userData.name }}</p>
+        <p class="text-lg">{{ userData.username }}</p>
+      </div>
+    </div>
   </header>
   <div class="container mx-auto py-4 my-4">
-
     <RouterView />
   </div>
 </template>
