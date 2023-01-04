@@ -3,7 +3,7 @@ export const msalConfig = {
     auth: {
         clientId: "5b2d983d-d256-4f9a-9824-7184a3989201",
         authority: "https://login.microsoftonline.com/fc9ed7be-3085-4832-a43a-a9b09096807c",
-        redirectUri: "http://localhost:5173/",
+        redirectUri: import.meta.env.VITE_REDIRECT_URI,
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
@@ -11,7 +11,7 @@ export const msalConfig = {
     }
 };
 export const loginRequest = {
-    redirectUri: "http://localhost:5173/",
+    redirectUri: import.meta.env.VITE_REDIRECT_URI,
     scopes: ["User.Read", "Mail.Read", "IMAP.AccessAsUser.All"]
 };
 
