@@ -4,7 +4,12 @@ import { onMounted } from "vue";
 import { useLogin } from "@/composables/login";
 const { checkAccounts, login, userData } = useLogin();
 onMounted(() => {
-  checkAccounts();
+  const accounts = checkAccounts();
+  if (!accounts || accounts.length === 0) {
+    if (window.location.pathname !== "/") {
+      window.location.href = "/";
+    }
+  }
 });
 </script>
 

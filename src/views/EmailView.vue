@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 const { readMail, userData } = useLogin();
@@ -10,9 +10,11 @@ const checkMail = async () => {
   const { response = {} } = await readMail();
   emails.value = response.value;
   loading.value = false;
-}
+};
 onMounted(() => {
-  checkMail();
+  if (userData) {
+    checkMail();
+  }
 })
 </script>
 

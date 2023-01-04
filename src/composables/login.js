@@ -18,9 +18,12 @@ const login = async () => {
 const checkAccounts = () => {
     const currentAccounts = myMSALObj.getAllAccounts();
     console.log("current accounts; ", currentAccounts);
+    if (!currentAccounts) return null;
     if (currentAccounts && currentAccounts.length > 0) {
         userData.value = currentAccounts[0];
+        return currentAccounts[0];
     }
+    return null;
 };
 const getTokenRedirect = async (request) => {
     /**
