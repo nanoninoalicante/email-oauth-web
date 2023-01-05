@@ -1,6 +1,11 @@
 import { ref, onMounted } from "vue";
 import * as msal from "@azure/msal-browser";
-import { msalConfig, loginRequest, graphConfig, tokenRequest } from "../authConfig";
+import {
+    msalConfig,
+    loginRequest,
+    graphConfig,
+    tokenRequest,
+} from "../authConfig";
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
 const userData = ref("");
 const accessToken = ref("");
@@ -76,11 +81,11 @@ const callMSGraph = async (endpoint, token) => {
 const readMail = async () => {
     const token = await getToken();
     return callMSGraph(graphConfig.graphMailEndpoint, token);
-}
+};
 const seeProfile = async () => {
     const token = await getToken();
     return callMSGraph(graphConfig.graphMeEndpoint, token);
-}
+};
 export function useLogin() {
     return {
         getToken,
@@ -90,6 +95,6 @@ export function useLogin() {
         checkAccounts,
         login,
         readMail,
-        seeProfile
+        seeProfile,
     };
 }
