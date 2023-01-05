@@ -86,6 +86,22 @@ const seeProfile = async () => {
     const token = await getToken();
     return callMSGraph(graphConfig.graphMeEndpoint, token);
 };
+
+const signOut = (username) => {
+
+    /**
+     * You can pass a custom request object below. This will override the initial configuration. For more information, visit:
+     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#request
+     */
+
+    const logoutRequest = {
+        account: myMSALObj.getAccountByUsername(username),
+        postLogoutRedirectUri: msalConfig.auth.redirectUri,
+        mainWindowRedirectUri: msalConfig.auth.redirectUri
+    };
+
+    myMSALObj.logoutPopup(logoutRequest);
+}
 export function useLogin() {
     return {
         getToken,
@@ -96,5 +112,6 @@ export function useLogin() {
         login,
         readMail,
         seeProfile,
+        signOut
     };
 }

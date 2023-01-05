@@ -2,7 +2,7 @@
 import { RouterView } from "vue-router";
 import { onBeforeMount } from "vue";
 import { useLogin } from "@/composables/login";
-const { checkAccounts, login, userData } = useLogin();
+const { checkAccounts, login, userData, signOut } = useLogin();
 onBeforeMount(() => {
     const accounts = checkAccounts();
     if (!accounts || accounts.length === 0) {
@@ -14,20 +14,24 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <header class="container mx-auto">
-        <div class="m-4 p-4">
+    <header class="flex flex-row justify-between">
+        <div class="m-4 p-8">
             <h1 class="text-3xl font-medium text-left">Email OAuth</h1>
         </div>
-        <div class="flex"></div>
-        <div
-            class="fixed right-0 top-0 m-4 text-right md:mr-12 bg-white rounded-3xl p-6"
-        >
+        <div class="m-4 text-right bg-white rounded-3xl p-4">
             <button
                 v-if="!userData"
                 @click="login"
-                class="p-4 rounded-2xl text-md bg-blue-500 text-white"
+                class="px-4 py-3 mb-2 rounded-3xl text-md bg-blue-500 text-white active:bg-blue-900 hover:bg-blue-700"
             >
                 Login with Microsoft
+            </button>
+            <button
+                v-if="userData"
+                @click="signOut(userData.username)"
+                class="px-4 py-2 mb-2 rounded-3xl text-sm bg-gray-500 text-white active:bg-gray-700 hover:bg-gray-600"
+            >
+                Sign Out
             </button>
             <div v-if="userData" class="flex flex-col text-gray-600">
                 <p v-if="userData.name" class="text-sm">You are logged in</p>

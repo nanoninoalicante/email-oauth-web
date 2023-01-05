@@ -51,7 +51,7 @@ onMounted(() => {
                             email.from?.emailAddress?.address
                         }}</span>
                     </div>
-                    <div class="flex px-2">
+                    <div class="px-2">
                         <a
                             :href="email.webLink"
                             target="_blank"
@@ -59,7 +59,7 @@ onMounted(() => {
                             >{{ email.subject }}</a
                         >
                     </div>
-                    <div class="flex px-2">
+                    <div class="px-2">
                         <p class="text-xs">{{ email.bodyPreview }}</p>
                     </div>
                 </div>
