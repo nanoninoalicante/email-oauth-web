@@ -8,7 +8,7 @@ export const msalConfig = {
             import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/",
     },
     cache: {
-        cacheLocation: "sessionStorage", // This configures where your cache will be stored
+        cacheLocation: "localStorage", // This configures where your cache will be stored
         storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
     },
 };
