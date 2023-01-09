@@ -78,9 +78,10 @@ const callMSGraph = async (endpoint, token) => {
         .catch((error) => console.log(error));
     return { response, endpoint };
 };
-const readMail = async () => {
+const readMail = async (filterEmail = null) => {
     const token = await getToken();
-    return callMSGraph(graphConfig.graphMailEndpoint, token);
+    const filterString = filterEmail ? `?$filter=(from/emailAddress/address) eq '${filterEmail}'` : ""
+    return callMSGraph(`${graphConfig.graphMailEndpoint}${filterString}`, token);
 };
 const seeProfile = async () => {
     const token = await getToken();
