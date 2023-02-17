@@ -5,7 +5,7 @@ export const msalConfig = {
         authority:
             "https://login.microsoftonline.com/05645730-084a-4e31-a1cc-15250092a87a",
         redirectUri:
-            import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/",
+            import.meta.env.VITE_REDIRECT_URI || "http://localhost:5174/",
     },
     cache: {
         cacheLocation: "localStorage", // This configures where your cache will be stored
@@ -13,7 +13,7 @@ export const msalConfig = {
     },
 };
 export const loginRequest = {
-    redirectUri: import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/",
+    redirectUri: import.meta.env.VITE_REDIRECT_URI || "http://localhost:5174/",
     scopes: ["User.Read", "Mail.Read"],
 };
 export const tokenRequest = {

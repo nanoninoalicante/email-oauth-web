@@ -6,11 +6,15 @@ import { useStorage } from "@vueuse/core";
 const { readMail, userData } = useLogin();
 const emails = ref([]);
 const loading = ref(false);
+const direction = ref("from");
 const emailFilter = useStorage("email-filter", null, sessionStorage);
 const checkMail = async () => {
     console.log("checking email");
     loading.value = true;
-    const { response = {} } = await readMail(emailFilter.value);
+    const { response = {} } = await readMail(
+        emailFilter.value,
+        direction.value
+    );
     emails.value = response.value;
     console.log("emails: ", response.value);
     loading.value = false;
@@ -39,8 +43,16 @@ onMounted(() => {
                 v-model="emailFilter"
                 type="text"
                 class="text-lg p-4 m-4 rounded-3xl bg-gray-100 text-gray-600 md:w-2/3"
-                placeholder="Filter by from email"
+                placeholder="Filter by from/to email"
             />
+            <select
+                v-model="direction"
+                name="direction"
+                class="p-4 m-4 rounded-3xl"
+            >
+                <option value="to">To</option>
+                <option value="from">From</option>
+            </select>
             <button
                 @click="checkMail"
                 class="rounded-3xl ring-2 ring-blue-300 active:bg-blue-700 bg-blue-400 p-4 hover:bg-blue-500 text-white"
