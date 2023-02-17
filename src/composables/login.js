@@ -78,9 +78,14 @@ const callMSGraph = async (endpoint, token) => {
         .catch((error) => console.log(error));
     return { response, endpoint };
 };
-const readMail = async (filterEmail = null) => {
+
+const readMail = async (filterEmail = null, direction = "from") => {
     const token = await getToken();
-    const filterString = filterEmail ? `?$filter=(from/emailAddress/address) eq '${filterEmail}'` : ""
+    if (direction === "to") {
+        const filterString = filterEmail ? `?$search="to:${filterEmail}"` : ""
+        return callMSGraph(`${graphConfig.graphMeEndpoint}/mailFolders/sentItems/messages${filterString}`, token);
+    }
+    const filterString = filterEmail ? `? $filter = (from / emailAddress / address) eq '${filterEmail}'` : ""
     return callMSGraph(`${graphConfig.graphMailEndpoint}${filterString}`, token);
 };
 const seeProfile = async () => {
