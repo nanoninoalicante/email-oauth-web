@@ -82,7 +82,7 @@ const callMSGraph = async (endpoint, token) => {
 const readMail = async (filterEmail = null, direction = "from") => {
     const token = await getToken();
     if (direction === "to") {
-        const filterString = filterEmail ? `?$filter=toRecipients/any(p:p/emailAddress/address eq '${filterEmail}')` : ""
+        const filterString = filterEmail ? `?$search="to:${filterEmail}"` : ""
         return callMSGraph(`${graphConfig.graphMeEndpoint}/mailFolders/sentItems/messages${filterString}`, token);
     }
     const filterString = filterEmail ? `? $filter = (from / emailAddress / address) eq '${filterEmail}'` : ""
