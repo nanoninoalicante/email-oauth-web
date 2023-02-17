@@ -73,12 +73,15 @@ onMounted(() => {
                     <div
                         class="flex flex-col py-2 px-4 bg-gray-100 rounded-2xl"
                     >
-                        <span class="text-md">{{
-                            email.from?.emailAddress?.name
-                        }}</span>
-                        <span class="text-sm">{{
-                            email.from?.emailAddress?.address
-                        }}</span>
+                        <span class="text-md"
+                            >From: {{ email.from?.emailAddress?.name }}</span
+                        >
+                        <span class="text-sm"
+                            >From: {{ email.from?.emailAddress?.address }}</span
+                        >
+                        <span v-for="to in email.toRecipients" class="text-sm"
+                            >To: {{ to.emailAddress?.address }}</span
+                        >
                     </div>
                     <div class="px-2">
                         <a
