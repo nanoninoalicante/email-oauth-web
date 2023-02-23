@@ -1,10 +1,13 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 import Email from "@/components/Email.vue";
 import { useStorage } from "@vueuse/core";
-const { readMail, userData, readAdminMail } = useLogin();
+const route = useRoute();
+const userId = computed(() => route.params?.userId);
+const { readAdminMail } = useLogin();
 const emails = ref([]);
 const loading = ref(false);
 const direction = ref("from");
@@ -12,7 +15,10 @@ const emailFilter = useStorage("email-filter", null, sessionStorage);
 const checkMail = async () => {
     console.log("checking email");
     loading.value = true;
-    const { response = {} } = await readAdminMail(emailFilter.value || null);
+    const { response = {} } = await readAdminMail(
+        emailFilter.value || null,
+        userId.value
+    );
     emails.value = response.value;
     console.log("emails: ", response.value);
     loading.value = false;

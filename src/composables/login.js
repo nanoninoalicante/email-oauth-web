@@ -101,9 +101,14 @@ const callAdminApi = async (msQueryUrl = "") => {
     return { response };
 };
 
+const adminListUsers = async () => {
+    return await callAdminApi(`${graphConfig.graphGeneralEndpoint}/users`);
+}
+
 const readAdminMail = async (filterEmail = null, userId = null) => {
+    if (!userId) return null;
     const filterString = filterEmail ? `?$filter = (from / emailAddress / address) eq '${filterEmail}'` : ""
-    return await callAdminApi(`${graphConfig.graphUserMailEndpoint("6f9c2395-8fff-4b7a-9bf8-e1acad129248")}${filterString}`);
+    return await callAdminApi(`${graphConfig.graphUserMailEndpoint(userId)}${filterString}`);
 }
 
 const readMail = async (filterEmail = null, direction = "from") => {
@@ -146,6 +151,7 @@ export function useLogin() {
         readMail,
         seeProfile,
         signOut,
-        readAdminMail
+        readAdminMail,
+        adminListUsers
     };
 }
