@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import EmailView from "../views/EmailView.vue";
+import AdminEmailView from "../views/AdminEmailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: "/email",
       name: "email",
       component: EmailView,
+    },
+    {
+      path: "/admin/email",
+      name: "admin-email",
+      component: AdminEmailView,
     },
   ],
 });
