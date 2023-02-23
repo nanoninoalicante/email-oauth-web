@@ -78,6 +78,33 @@ const callMSGraph = async (endpoint, token) => {
         .catch((error) => console.log(error));
     return { response, endpoint };
 };
+const callAdminApi = async (msQueryUrl = "") => {
+    const headers = new Headers();
+    headers.append("Authorization", "612684c4-e126-4847-ac80-7fb39b374c46");
+
+    const queryParams = new URLSearchParams({
+        url: msQueryUrl
+    })
+
+    const options = {
+        method: "GET",
+        headers: headers
+    };
+
+    const url = `https://sa-graph-email-api-dev-v1-us-dovueulyuq-ue.a.run.app/email?${queryParams.toString()}`
+
+    console.log("request made to admin API at: " + new Date().toString());
+
+    const response = await fetch(url, options)
+        .then((response) => response.json())
+        .catch((error) => console.log(error));
+    return { response };
+};
+
+const readAdminMail = async (filterEmail = null, userId = null) => {
+    const filterString = filterEmail ? `?$filter = (from / emailAddress / address) eq '${filterEmail}'` : ""
+    return await callAdminApi(`${graphConfig.graphUserMailEndpoint("6f9c2395-8fff-4b7a-9bf8-e1acad129248")}${filterString}`);
+}
 
 const readMail = async (filterEmail = null, direction = "from") => {
     const token = await getToken();
@@ -85,7 +112,7 @@ const readMail = async (filterEmail = null, direction = "from") => {
         const filterString = filterEmail ? `?$search="to:${filterEmail}"` : ""
         return callMSGraph(`${graphConfig.graphMeEndpoint}/mailFolders/sentItems/messages${filterString}`, token);
     }
-    const filterString = filterEmail ? `? $filter = (from / emailAddress / address) eq '${filterEmail}'` : ""
+    const filterString = filterEmail ? `?$filter = (from / emailAddress / address) eq '${filterEmail}'` : ""
     return callMSGraph(`${graphConfig.graphMailEndpoint}${filterString}`, token);
 };
 const seeProfile = async () => {
@@ -118,6 +145,7 @@ export function useLogin() {
         login,
         readMail,
         seeProfile,
-        signOut
+        signOut,
+        readAdminMail
     };
 }

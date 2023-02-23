@@ -4,7 +4,7 @@ import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 import Email from "@/components/Email.vue";
 import { useStorage } from "@vueuse/core";
-const { readMail, userData, checkAccounts } = useLogin();
+const { readMail, userData, readAdminMail } = useLogin();
 const emails = ref([]);
 const loading = ref(false);
 const direction = ref("from");
@@ -12,26 +12,13 @@ const emailFilter = useStorage("email-filter", null, sessionStorage);
 const checkMail = async () => {
     console.log("checking email");
     loading.value = true;
-    const { response = {} } = await readMail(
-        emailFilter.value,
-        direction.value
-    );
+    const { response = {} } = await readAdminMail(emailFilter.value || null);
     emails.value = response.value;
     console.log("emails: ", response.value);
     loading.value = false;
 };
-onBeforeMount(() => {
-    const accounts = checkAccounts();
-    if (!accounts || accounts.length === 0) {
-        if (window.location.pathname !== "/") {
-            window.location.href = "/";
-        }
-    }
-});
-onMounted(() => {
-    if (userData) {
-        checkMail();
-    }
+onMounted(async () => {
+    await checkMail();
 });
 </script>
 
@@ -69,9 +56,8 @@ onMounted(() => {
                 Filter
             </button>
         </div>
-        <div v-if="userData" class="flex flex-col space-y-8">
+        <div v-if="emails && emails.length > 0" class="flex flex-col space-y-8">
             <div
-                v-if="emails.length > 0"
                 v-for="email in emails"
                 class="flex w-full bg-gray-50 p-4 rounded-xl"
             >

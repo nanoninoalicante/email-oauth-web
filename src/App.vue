@@ -1,16 +1,7 @@
 <script setup>
 import { RouterView } from "vue-router";
-import { onBeforeMount } from "vue";
 import { useLogin } from "@/composables/login";
-const { checkAccounts, login, userData, signOut } = useLogin();
-onBeforeMount(() => {
-    const accounts = checkAccounts();
-    if (!accounts || accounts.length === 0) {
-        if (window.location.pathname !== "/") {
-            window.location.href = "/";
-        }
-    }
-});
+const { login, userData, signOut } = useLogin();
 </script>
 
 <template>
