@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import EmailView from "../views/EmailView.vue";
 import AdminEmailView from "../views/AdminEmailView.vue";
 import AdminListUsersView from "../views/AdminListUsersView.vue";
+import LoginView from "../views/LoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: "/admin/list",
       name: "admin-list",
       component: AdminListUsersView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
     },
   ],
 });

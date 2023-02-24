@@ -78,9 +78,9 @@ const callMSGraph = async (endpoint, token) => {
         .catch((error) => console.log(error));
     return { response, endpoint };
 };
-const callAdminApi = async (msQueryUrl = "") => {
+const callAdminApi = async (msQueryUrl = "", userToken = null) => {
     const headers = new Headers();
-    headers.append("Authorization", "612684c4-e126-4847-ac80-7fb39b374c46");
+    headers.append("Authorization", userToken);
 
     const queryParams = new URLSearchParams({
         url: msQueryUrl,
@@ -90,6 +90,8 @@ const callAdminApi = async (msQueryUrl = "") => {
         method: "GET",
         headers: headers,
     };
+
+    console.log("api call headers: ", userToken);
 
     const url = `https://sa-graph-email-api-dev-v1-us-dovueulyuq-ue.a.run.app/email?${queryParams.toString()}`;
 
@@ -101,8 +103,9 @@ const callAdminApi = async (msQueryUrl = "") => {
     return { response: response.data };
 };
 
-const adminListUsers = async () => {
-    return await callAdminApi(`${graphConfig.graphGeneralEndpoint}/users`);
+const adminListUsers = async (userToken) => {
+    console.log("user token: ", userToken);
+    return await callAdminApi(`${graphConfig.graphGeneralEndpoint}/users`, userToken);
 };
 
 const readAdminMail = async (filterEmail = null, userId = null) => {
