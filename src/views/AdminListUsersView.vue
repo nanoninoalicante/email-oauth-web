@@ -1,13 +1,17 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+import { useFirebaseAuth } from "@/composables/auth";
+const { user } = useFirebaseAuth();
+const userToken = computed(() => (user ? user : null));
 const { adminListUsers } = useLogin();
 const loading = ref(false);
 const users = ref([]);
 onMounted(async () => {
     const { response } = await adminListUsers();
     console.log("list user: ", response?.value);
+    console.log("user: ", user.value);
     users.value = response?.value;
 });
 </script>
