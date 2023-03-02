@@ -1,7 +1,9 @@
 // Config object to be passed to MSAL on creation
 export const msalConfig = {
     auth: {
-        clientId: "199aeeba-957d-4dc9-9db5-8963d2d9b832",
+        clientId:
+            import.meta.env.VITE_AZURE_CLIENT_ID ||
+            "199aeeba-957d-4dc9-9db5-8963d2d9b832",
         authority:
             "https://login.microsoftonline.com/05645730-084a-4e31-a1cc-15250092a87a",
         redirectUri:
@@ -25,6 +27,8 @@ export const tokenRequest = {
 export const graphConfig = {
     graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
     graphMailEndpoint: "https://graph.microsoft.com/v1.0/me/messages",
-    graphUserMailEndpoint: (userId) => `https://graph.microsoft.com/v1.0/users/${userId}/messages`,
-    graphGeneralEndpoint: `https://graph.microsoft.com/v1.0`
+    graphUserMailEndpoint: (userId) =>
+        `https://graph.microsoft.com/v1.0/users/${userId}/messages`,
+    graphGeneralEndpoint: `https://graph.microsoft.com/v1.0`,
+    graphApiBaseUrl: import.meta.env.VITE_EMAIL_API_BASE_URL,
 };

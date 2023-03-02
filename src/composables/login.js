@@ -93,7 +93,9 @@ const callAdminApi = async (msQueryUrl = "", userToken = null) => {
 
     console.log("api call headers: ", userToken);
 
-    const url = `https://sa-graph-email-api-dev-v1-us-dovueulyuq-ue.a.run.app/email?${queryParams.toString()}`;
+    const url = `${
+        graphConfig.graphApiBaseUrl
+    }/email?${queryParams.toString()}`;
 
     console.log("request made to admin API at: " + new Date().toString());
 
@@ -105,7 +107,10 @@ const callAdminApi = async (msQueryUrl = "", userToken = null) => {
 
 const adminListUsers = async (userToken) => {
     console.log("user token: ", userToken);
-    return await callAdminApi(`${graphConfig.graphGeneralEndpoint}/users`, userToken);
+    return await callAdminApi(
+        `${graphConfig.graphGeneralEndpoint}/users`,
+        userToken
+    );
 };
 
 const readAdminMail = async (filterEmail = null, userId = null) => {
