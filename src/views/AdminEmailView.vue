@@ -5,6 +5,13 @@ import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 import Email from "@/components/Email.vue";
 import { useStorage } from "@vueuse/core";
+import { useFirebaseAuth } from "@/composables/auth";
+
+const { isAuthenticated, auth, onAuthStateChanged } = useFirebaseAuth();
+const userToken = computed(() =>
+    user && user.value ? user.value.accessToken : null
+);
+
 const route = useRoute();
 const userId = computed(() => route.params?.userId);
 const { readAdminMail } = useLogin();
@@ -24,7 +31,21 @@ const checkMail = async () => {
     loading.value = false;
 };
 onMounted(async () => {
-    await checkMail();
+    loading.value = true;
+    onAuthStateChanged(auth, async (currentUser) => {
+        console.log("current user: ", currentUser);
+        console.log("is authenticated: ", isAuthenticated.value);
+        if (isAuthenticated && isAuthenticated.value) {
+            await checkMail();
+            loading.value = false;
+        } else {
+            loading.value = false;
+            const currentPage = window.location?.href || "/";
+            window.location.href = `/login?redirect=${encodeURIComponent(
+                currentPage
+            )}`;
+        }
+    });
 });
 </script>
 

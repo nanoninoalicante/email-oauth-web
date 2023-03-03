@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { initializeApp } from "firebase/app";
-import { browserLocalPersistence, getAuth, signInWithEmailAndPassword, setPersistence } from "firebase/auth";
+import { browserLocalPersistence, getAuth, signInWithEmailAndPassword, setPersistence, onAuthStateChanged } from "firebase/auth";
 import { useAuth } from "@vueuse/firebase/useAuth";
 
 const app = initializeApp({
@@ -19,9 +19,7 @@ const signIn = async () => {
             return signInWithEmailAndPassword(auth, email.value, password.value);
         })
         .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
+            throw error;
         });
 };
 
@@ -32,6 +30,8 @@ export function useFirebaseAuth() {
         password,
         isAuthenticated,
         user,
-        signIn
+        signIn,
+        auth,
+        onAuthStateChanged
     }
 }
