@@ -3,7 +3,7 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 import { useFirebaseAuth } from "@/composables/auth";
-const { isAuthenticated, user } = useFirebaseAuth();
+const { isAuthenticated, user, auth, onAuthStateChanged } = useFirebaseAuth();
 const userToken = computed(() =>
     user && user.value ? user.value.accessToken : null
 );
@@ -11,12 +11,25 @@ const { adminListUsers } = useLogin();
 const loading = ref(false);
 const users = ref([]);
 onMounted(async () => {
-    if (isAuthenticated && isAuthenticated.value) {
-        console.log("user token: ", userToken.value);
-        const { response } = await adminListUsers(userToken.value);
-        console.log("list user: ", response?.value);
-        users.value = response?.value;
-    }
+    loading.value = true;
+    onAuthStateChanged(auth, async (currentUser) => {
+        console.log("current user: ", currentUser);
+        console.log("is authenticated: ", isAuthenticated.value);
+        if (isAuthenticated && isAuthenticated.value) {
+            console.log("user token: ", userToken.value);
+            const { response } = await adminListUsers(userToken.value);
+            console.log("list user: ", response?.value);
+            users.value = response?.value;
+
+            loading.value = false;
+        } else {
+            loading.value = false;
+            const currentPage = window.location.href;
+            window.location.href = `/login?redirect=${encodeURIComponent(
+                currentPage
+            )}`;
+        }
+    });
 });
 </script>
 
