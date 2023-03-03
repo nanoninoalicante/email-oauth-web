@@ -80,7 +80,7 @@ const callMSGraph = async (endpoint, token) => {
 };
 const callAdminApi = async (msQueryUrl = "", userToken = null) => {
     const headers = new Headers();
-    headers.append("Authorization", userToken);
+    headers.append("Authorization", `Bearer ${userToken}`);
 
     const queryParams = new URLSearchParams({
         url: msQueryUrl,
@@ -93,9 +93,8 @@ const callAdminApi = async (msQueryUrl = "", userToken = null) => {
 
     console.log("api call headers: ", userToken);
 
-    const url = `${
-        graphConfig.graphApiBaseUrl
-    }/email?${queryParams.toString()}`;
+    const url = `${graphConfig.graphApiBaseUrl
+        }/email?${queryParams.toString()}`;
 
     console.log("request made to admin API at: " + new Date().toString());
 
@@ -113,13 +112,14 @@ const adminListUsers = async (userToken) => {
     );
 };
 
-const readAdminMail = async (filterEmail = null, userId = null) => {
+const readAdminMail = async (filterEmail = null, userId = null, userToken) => {
     if (!userId) return null;
     const filterString = filterEmail
         ? `?$filter = (from / emailAddress / address) eq '${filterEmail}'`
         : "";
     return await callAdminApi(
-        `${graphConfig.graphUserMailEndpoint(userId)}${filterString}`
+        `${graphConfig.graphUserMailEndpoint(userId)}${filterString}`,
+        userToken
     );
 };
 

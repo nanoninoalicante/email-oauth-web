@@ -7,10 +7,8 @@ import Email from "@/components/Email.vue";
 import { useStorage } from "@vueuse/core";
 import { useFirebaseAuth } from "@/composables/auth";
 
-const { isAuthenticated, auth, onAuthStateChanged } = useFirebaseAuth();
-const userToken = computed(() =>
-    user && user.value ? user.value.accessToken : null
-);
+const { isAuthenticated, auth, onAuthStateChanged, userToken } =
+    useFirebaseAuth();
 
 const route = useRoute();
 const userId = computed(() => route.params?.userId);
@@ -24,7 +22,8 @@ const checkMail = async () => {
     loading.value = true;
     const { response = {} } = await readAdminMail(
         emailFilter.value || null,
-        userId.value
+        userId.value,
+        userToken.value
     );
     emails.value = response.value;
     console.log("emails: ", response.value);

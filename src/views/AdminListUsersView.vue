@@ -3,10 +3,9 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useLogin } from "@/composables/login";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 import { useFirebaseAuth } from "@/composables/auth";
-const { isAuthenticated, user, auth, onAuthStateChanged } = useFirebaseAuth();
-const userToken = computed(() =>
-    user && user.value ? user.value.accessToken : null
-);
+const { isAuthenticated, user, auth, onAuthStateChanged, userToken } =
+    useFirebaseAuth();
+
 const { adminListUsers } = useLogin();
 const loading = ref(false);
 const users = ref([]);

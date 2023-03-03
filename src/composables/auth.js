@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { initializeApp } from "firebase/app";
 import { browserLocalPersistence, getAuth, signInWithEmailAndPassword, setPersistence, onAuthStateChanged } from "firebase/auth";
 import { useAuth } from "@vueuse/firebase/useAuth";
@@ -23,6 +23,10 @@ const signIn = async () => {
         });
 };
 
+const userToken = computed(() =>
+    user && user.value ? user.value.accessToken : null
+);
+
 export function useFirebaseAuth() {
     return {
         app,
@@ -32,6 +36,7 @@ export function useFirebaseAuth() {
         user,
         signIn,
         auth,
+        userToken,
         onAuthStateChanged
     }
 }
